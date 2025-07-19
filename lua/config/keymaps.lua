@@ -8,12 +8,13 @@ vim.keymap.set("n", "<leader>rr", function()
   local filebase = vim.fn.fnamemodify(filename, ":t:r")
   
   -- Use system temp directory for compiled outputs
-  local temp_dir = vim.fn.expand("$TEMP") .. "\\nvim_cpp_temp"
+  local tmpdir = os.getenv("TMPDIR") or "/tmp"
+  local temp_dir = tmpdir .. "/nvim_cpp_temp"
   
   -- Create temp directory if it doesn't exist and remove existing executable
-  local exe_path = temp_dir .. "\\" .. filebase .. ".exe"
-  local mkdir_cmd = string.format("if not exist \"%s\" mkdir \"%s\"", temp_dir, temp_dir)
-  local remove_cmd = string.format("if exist \"%s\" del \"%s\"", exe_path, exe_path)
+  local exe_path = temp_dir .. "/" .. filebase
+  local mkdir_cmd = string.format("mkdir -p \"%s\"", temp_dir)
+  local remove_cmd = string.format("rm -f \"%s\"", exe_path)
   -- Save the file before compiling
   vim.cmd("w")
 
@@ -29,7 +30,7 @@ vim.keymap.set("n", "<leader>rr", function()
   -- Check if compilation was successful and executable exists
   if vim.v.shell_error == 0 and vim.fn.filereadable(exe_path) == 1 then
     -- Run the compiled executable in a terminal split
-    local run_cmd = string.format(":split | :term \"%s\"", exe_path)
+    local run_cmd = string.format(":split | :term bash -c '%s; exec bash'", exe_path)
     vim.cmd(run_cmd)
   else
     -- Show error message if compilation failed
@@ -43,12 +44,13 @@ end, { noremap = true, silent = true, desc = "runCpp" })
 
 -- Add a keymap to clean up the temporary compilation directory
 vim.keymap.set("n", "<leader>rc", function()
-  local temp_dir = vim.fn.expand("$TEMP") .. "\\nvim_cpp_temp"
+  local tmpdir = os.getenv("TMPDIR") or "/tmp"
+  local temp_dir = tmpdir .. "/nvim_cpp_temp"
   
   -- Check if the directory exists before attempting to remove it
   if vim.fn.isdirectory(temp_dir) == 1 then
-    -- Use rmdir /s /q for recursive directory removal on Windows
-    local cleanup_cmd = string.format("rmdir /s /q \"%s\"", temp_dir)
+    -- Use rm -rf for recursive directory removal on Linux
+    local cleanup_cmd = string.format("rm -rf \"%s\"", temp_dir)
     vim.fn.system(cleanup_cmd)
     
     if vim.v.shell_error == 0 then
