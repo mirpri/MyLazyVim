@@ -38,7 +38,7 @@ return {
         end, { "i", "s" }),
       }),
       sources = {
-        { name = "luasnip" }, -- 确保 Snippet 的显示优先级
+        { name = "luasnip" },
         {
           name = "nvim_lsp",
           entry_filter = function(entry, ctx)
@@ -53,27 +53,23 @@ return {
         { name = "buffer" },
         { name = "path" },
       },
-      window = {
-        completion = cmp.config.window.bordered({
-          max_width = 50,
-        }),
-        documentation = cmp.config.window.bordered({
-          max_width = 60,
-        }),
-      },
       formatting = {
-        fields = { "abbr", "kind" },
-        format = function(entry, vim_item)
-          local max_width = 40
-          local label = vim_item.abbr
-          if #label > max_width then
-            vim_item.abbr = label:sub(1, max_width - 3) .. "..."
-          end
-          return vim_item
-        end,
+        fields = { "kind", "abbr"},
       },
       experimental = {
         ghost_text = false, -- 禁用 ghost text
+      },
+      window = {
+        completion = {
+          scrollbar = true,
+          max_height = 10,
+          max_width = 20,
+          winblend = 0,
+        },
+        documentation = {
+          max_width = 20,
+          winblend = 0,
+        },
       },
     }
   end,
