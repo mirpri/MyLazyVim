@@ -6,15 +6,15 @@ return {
     "hrsh7th/cmp-buffer",
     "hrsh7th/cmp-path",
     "hrsh7th/cmp-nvim-lsp",
-    "L3MON4D3/LuaSnip",  -- Add this line
+    "L3MON4D3/LuaSnip",
   },
   opts = function()
     local cmp = require("cmp")
-    local luasnip = require("luasnip")  -- Import luasnip
+    local luasnip = require("luasnip") -- 确保 LuaSnip 被正确导入
     return {
       snippet = {
         expand = function(args)
-          luasnip.lsp_expand(args.body)  -- Use luasnip's expansion function
+          luasnip.lsp_expand(args.body) -- 使用 LuaSnip 的扩展功能
         end,
       },
       mapping = cmp.mapping.preset.insert({
@@ -38,7 +38,18 @@ return {
         end, { "i", "s" }),
       }),
       sources = {
-        { name = "nvim_lsp" },
+        { name = "luasnip" }, -- 确保 Snippet 的显示优先级
+        {
+          name = "nvim_lsp",
+          entry_filter = function(entry, ctx)
+            local completion_item = entry.completion_item
+            -- 如果补全项有额外的文本编辑（通常是自动添加include），则过滤掉
+            if completion_item.additionalTextEdits and #completion_item.additionalTextEdits > 0 then
+              return false
+            end
+            return true
+          end,
+        },
         { name = "buffer" },
         { name = "path" },
       },
@@ -62,7 +73,7 @@ return {
         end,
       },
       experimental = {
-        ghost_text = false, -- disable ghost
+        ghost_text = false, -- 禁用 ghost text
       },
     }
   end,

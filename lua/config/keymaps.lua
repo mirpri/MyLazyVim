@@ -30,7 +30,7 @@ vim.keymap.set("n", "<leader>rr", function()
   -- Check if compilation was successful and executable exists
   if vim.v.shell_error == 0 and vim.fn.filereadable(exe_path) == 1 then
     -- Run the compiled executable in a terminal split
-    local run_cmd = string.format(":split | :term bash -c '%s; exec bash'", exe_path)
+    local run_cmd = string.format(":split | :term bash -c '%s'", exe_path)
     vim.cmd(run_cmd)
   else
     -- Show error message if compilation failed
