@@ -4,6 +4,7 @@ require("config.lazy")
 -- 禁用 LazyVim 的自动格式化功能
 vim.g.autoformat = false
 
+
 -- 打开文件时自动切换到文件所在目录
 vim.api.nvim_create_autocmd("BufEnter", {
   pattern = "*",
@@ -11,3 +12,6 @@ vim.api.nvim_create_autocmd("BufEnter", {
     vim.cmd("silent! lcd %:p:h")  -- 切换到当前文件的目录
   end,
 })
+
+vim.o.title = true
+vim.o.titlestring = "nvim - %t"

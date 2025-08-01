@@ -8,6 +8,9 @@ return {
       -- 设置背景为透明
       vim.api.nvim_set_hl(0, "Normal", { bg = "NONE" })
       vim.api.nvim_set_hl(0, "NormalFloat", { bg = "NONE" })
+      -- 设置行号背景为透明
+      vim.api.nvim_set_hl(0, "LineNr", { bg = "NONE" })
+      vim.api.nvim_set_hl(0, "SignColumn", { bg = "NONE" })
     end,
   },
   {
@@ -16,7 +19,6 @@ return {
     opts = function()
       return {
         options = {
-          theme = "molokai",
           section_separators = { left = "", right = "" }, -- 圆滑的分隔符
           component_separators = { left = "/", right = "/" },
         },
