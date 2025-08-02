@@ -12,3 +12,9 @@ vim.api.nvim_create_autocmd("TermOpen", {
     pattern = "*",
     command = "startinsert",
 })
+
+vim.api.nvim_create_autocmd("SwapExists", {
+  callback = function()
+    vim.cmd("let v:swapchoice = 'e'") -- Automatically choose to edit the file
+  end,
+})
