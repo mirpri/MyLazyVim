@@ -68,6 +68,18 @@ end, {
     desc = "cleanCppTemp"
 })
 
+vim.keymap.set("n", "<leader>rp", function()
+  local filename = vim.fn.expand("%:p")
+  local filepath = vim.fn.expand("%:p:h")
+  local filebase = vim.fn.fnamemodify(filename, ":t:r")
+  
+  vim.cmd("w") -- Save the file before running
+  
+  -- Run the Python script in a terminal split
+  local run_cmd = string.format(":split | :term python \"%s\"", filename)
+  vim.cmd(run_cmd)
+end, { noremap = true, silent = true, desc = "runPython" })
+
 -- Register the <leader>r menu name using which-key API (latest spec)
 local wk = require("which-key")
 wk.add({{
