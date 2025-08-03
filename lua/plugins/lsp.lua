@@ -8,6 +8,8 @@ return {
       },
       servers = {
         clangd = {}, -- C++
+        pyright = {}, -- Python
+        tsserver = {}, -- TypeScript
         -- add others as needed
         lua_ls = { enabled = false },
       },

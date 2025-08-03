@@ -2,7 +2,7 @@
 -- Default keymaps that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/keymaps.lua
 -- Add any additional keymaps here
 
-vim.keymap.set("n", "<leader>rr", function()
+vim.keymap.set("n", "<leader>rc", function()
   local filename = vim.fn.expand("%:p")
   local filepath = vim.fn.expand("%:p:h")
   local filebase = vim.fn.fnamemodify(filename, ":t:r")
@@ -42,8 +42,9 @@ vim.keymap.set("n", "<leader>rr", function()
   end
 end, { noremap = true, silent = true, desc = "runCpp" })
 
+
 -- Add a keymap to clean up the temporary compilation directory
-vim.keymap.set("n", "<leader>rc", function()
+vim.keymap.set("n", "<leader>rC", function()
   local tmpdir = os.getenv("TMPDIR") or "/tmp"
   local temp_dir = tmpdir .. "/nvim_cpp_temp"
   
@@ -62,6 +63,18 @@ vim.keymap.set("n", "<leader>rc", function()
     vim.notify("Temporary compilation directory does not exist", vim.log.levels.WARN)
   end
 end, { noremap = true, silent = true, desc = "cleanCppTemp" })
+
+vim.keymap.set("n", "<leader>rp", function()
+  local filename = vim.fn.expand("%:p")
+  local filepath = vim.fn.expand("%:p:h")
+  local filebase = vim.fn.fnamemodify(filename, ":t:r")
+  
+  vim.cmd("w") -- Save the file before running
+  
+  -- Run the Python script in a terminal split
+  local run_cmd = string.format(":split | :term python3 \"%s\"", filename)
+  vim.cmd(run_cmd)
+end, { noremap = true, silent = true, desc = "runPython" })
 
 -- Register the <leader>r menu name using which-key API (latest spec)
 local wk = require("which-key")

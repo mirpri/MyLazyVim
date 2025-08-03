@@ -54,7 +54,7 @@ return {
         { name = "path" },
       },
       formatting = {
-        fields = { "kind", "abbr"},
+        fields = { "abbr", "kind"},
       },
       experimental = {
         ghost_text = false, -- 禁用 ghost text

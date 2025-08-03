@@ -26,3 +26,13 @@ vim.api.nvim_create_autocmd("BufEnter", {
     vim.cmd("silent! lcd %:p:h")  -- 切换到当前文件的目录
   end,
 })
+
+-- 设置文件类型时自动调整缩进
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "*",
+  callback = function()
+    vim.bo.tabstop = 2
+    vim.bo.shiftwidth = 2
+    vim.bo.expandtab = true
+  end,
+})
