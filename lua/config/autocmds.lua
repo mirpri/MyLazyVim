@@ -27,12 +27,10 @@ vim.api.nvim_create_autocmd("BufEnter", {
   end,
 })
 
--- 设置文件类型时自动调整缩进
+-- 禁用拼写检查
 vim.api.nvim_create_autocmd("FileType", {
   pattern = "*",
   callback = function()
-    vim.bo.tabstop = 2
-    vim.bo.shiftwidth = 2
-    vim.bo.expandtab = true
+    vim.opt_local.spell = false
   end,
 })

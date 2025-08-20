@@ -1,7 +1,7 @@
 -- Keymaps are automatically loaded on the VeryLazy event
 -- Default keymaps that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/keymaps.lua
 -- Add any additional keymaps here
-vim.keymap.set("n", "<leader>rr", function()
+vim.keymap.set("n", "<leader>rc", function()
     local filename = vim.fn.expand("%:p")
     local filepath = vim.fn.expand("%:p:h")
     local filebase = vim.fn.fnamemodify(filename, ":t:r")
@@ -45,7 +45,7 @@ end, {
 })
 
 -- Add a keymap to clean up the temporary compilation directory
-vim.keymap.set("n", "<leader>rc", function()
+vim.keymap.set("n", "<leader>rC", function()
     local temp_dir = vim.fn.expand("$TEMP") .. "\\nvim_cpp_temp"
 
     -- Check if the directory exists before attempting to remove it
