@@ -7,7 +7,7 @@ return {
         enabled = false
       },
       servers = {
-        clangd = {}, -- C++
+        clangd = {command="clangd", mason=false}, -- C++
         pyright = {}, -- Python
         tsserver = {}, -- TypeScript
         -- add others as needed
