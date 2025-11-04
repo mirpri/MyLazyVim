@@ -11,25 +11,24 @@ vim.keymap.set("n", "<leader>rc", function()
 
     -- Create temp directory if it doesn't exist and remove existing executable
     local exe_path = temp_dir .. "\\" .. filebase .. ".exe"
-    local mkdir_cmd = string.format("if not exist \"%s\" mkdir \"%s\"", temp_dir, temp_dir)
-    local remove_cmd = string.format("if exist \"%s\" del \"%s\"", exe_path, exe_path)
+    -- Use Lua APIs (shell-agnostic) instead of shell commands; pwsh is our shell, but this is simpler and safer
+    vim.fn.mkdir(temp_dir, "p")
+    if vim.fn.filereadable(exe_path) == 1 then
+        vim.fn.delete(exe_path)
+    end
     -- Save the file before compiling
     vim.cmd("w")
 
-    -- Create temp directory first
-    vim.fn.system(mkdir_cmd)
-
-    -- Remove existing executable if it exists
-    vim.fn.system(remove_cmd)
+    -- Temp directory ensured and old executable removed above
 
     -- Compile the file with proper error capture
     local compile_cmd = string.format("g++ \"%s\" -o \"%s\" 2>&1", filename, exe_path)
     local compile_output = vim.fn.system(compile_cmd)
     -- Check if compilation was successful and executable exists
     if vim.v.shell_error == 0 and vim.fn.filereadable(exe_path) == 1 then
-        -- Run the compiled executable in a terminal split
-        local run_cmd = string.format(":split | :term \"%s\"", exe_path)
-        vim.cmd(run_cmd)
+        -- Run the compiled executable in a terminal split via PowerShell
+        local term_cmd = string.format(":split | :term pwsh -NoLogo -NoProfile -Command \"& '%s'\"", exe_path)
+        vim.cmd(term_cmd)
     else
         -- Show error message if compilation failed
         local error_msg = "Compilation failed!"
@@ -50,8 +49,8 @@ vim.keymap.set("n", "<leader>rC", function()
 
     -- Check if the directory exists before attempting to remove it
     if vim.fn.isdirectory(temp_dir) == 1 then
-        -- Use rmdir /s /q for recursive directory removal on Windows
-        local cleanup_cmd = string.format("rmdir /s /q \"%s\"", temp_dir)
+        -- PowerShell-native removal
+        local cleanup_cmd = string.format("Remove-Item -LiteralPath \"%s\" -Recurse -Force -ErrorAction SilentlyContinue", temp_dir)
         vim.fn.system(cleanup_cmd)
 
         if vim.v.shell_error == 0 then
@@ -75,8 +74,8 @@ vim.keymap.set("n", "<leader>rp", function()
   
   vim.cmd("w") -- Save the file before running
   
-  -- Run the Python script in a terminal split
-  local run_cmd = string.format(":split | :term python \"%s\"", filename)
+    -- Run the Python script in a terminal split via PowerShell
+    local run_cmd = string.format(":split | :term pwsh -NoLogo -NoProfile -Command \"python '%s'\"", filename)
   vim.cmd(run_cmd)
 end, { noremap = true, silent = true, desc = "runPython" })
 
