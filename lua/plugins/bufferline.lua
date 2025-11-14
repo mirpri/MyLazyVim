@@ -7,9 +7,10 @@ return {
         separator_style = { "", "" }, -- No separators
         indicator = {
           style = "icon",
-          icon = "●",
+          icon = "▶",
         },
         always_show_bufferline = false, -- Only show when more than one buffer
+        mode = "tabs",
       },
     }
   end,

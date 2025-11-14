@@ -22,7 +22,7 @@ vim.keymap.set("n", "<leader>rc", function()
     -- Temp directory ensured and old executable removed above
 
     -- Compile the file with proper error capture
-    local compile_cmd = string.format("g++ \"%s\" -o \"%s\" 2>&1", filename, exe_path)
+    local compile_cmd = string.format("g++ -std=c++24 \"%s\" -o \"%s\" 2>&1", filename, exe_path)
     local compile_output = vim.fn.system(compile_cmd)
     -- Check if compilation was successful and executable exists
     if vim.v.shell_error == 0 and vim.fn.filereadable(exe_path) == 1 then
@@ -85,3 +85,15 @@ wk.add({{
     "<leader>r",
     group = "Run/Compile"
 }})
+
+vim.keymap.set("n", "<leader>rr", function()
+  local filename = vim.fn.expand("%:p")
+  local filepath = vim.fn.expand("%:p:h")
+  local filebase = vim.fn.fnamemodify(filename, ":t:r")
+  
+  vim.cmd("w") -- Save the file before running
+  
+    -- Cargo run in a terminal split via PowerShell
+    local run_cmd = string.format(":split | :term pwsh -NoLogo -NoProfile -Command \"cargo run '%s'\"", filepath)
+  vim.cmd(run_cmd)
+end, { noremap = true, silent = true, desc = "runRust (cargo)" })

@@ -2,37 +2,9 @@ return {
   "nvim-lualine/lualine.nvim",
   event = "VeryLazy",
   opts = function()
-    local custom_theme = {
-      normal = {
-        a = { fg = "#67f0fc", bg = "NONE", gui = "bold" },
-        b = { fg = "#fce167", bg = "NONE" },
-        c = { fg = "#ffffff", bg = "NONE" },
-      },
-      insert = {
-        a = { fg = "#a6ff4c", bg = "NONE", gui = "bold" },
-      },
-      visual = {
-        a = { fg = "#bf88ff", bg = "NONE", gui = "bold" },
-      },
-      replace = {
-        a = { fg = "#ff2f63", bg = "NONE", gui = "bold" },
-      },
-      command = {
-        a = { fg = "#ffe100", bg = "NONE", gui = "bold" },
-      },
-      terminal = {
-        a = { fg = "#ff8c00", bg = "NONE", gui = "bold" },
-      },
-      inactive = {
-        a = { fg = "#c1c1c1", bg = "NONE", gui = "bold" },
-        b = { fg = "#c1c1c1", bg = "NONE" },
-        c = { fg = "#c1c1c1", bg = "NONE" },
-      },
-    }
-
     return {
       options = {
-        theme = custom_theme,
+        theme = "auto", -- 自动检测并使用当前颜色主题
         section_separators = { left = "", right = "" },
         component_separators = { left = "", right = "" },
         globalstatus = true,
