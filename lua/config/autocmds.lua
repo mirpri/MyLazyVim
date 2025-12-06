@@ -20,17 +20,34 @@ vim.api.nvim_create_autocmd("SwapExists", {
 })
 
 -- 打开文件时自动切换到文件所在目录
-vim.api.nvim_create_autocmd("BufEnter", {
-  pattern = "*",
-  callback = function()
-    vim.cmd("silent! lcd %:p:h")  -- 切换到当前文件的目录
-  end,
-})
+-- vim.api.nvim_create_autocmd("BufEnter", {
+--   pattern = "*",
+--   callback = function()
+--     vim.cmd("silent! lcd %:p:h")  -- 切换到当前文件的目录
+--   end,
+-- })
 
 -- 禁用拼写检查
 vim.api.nvim_create_autocmd("FileType", {
   pattern = "*",
   callback = function()
     vim.opt_local.spell = false
+    -- 禁用自动注释（确保在文件类型插件加载后生效）
+    vim.opt_local.formatoptions:remove({ "c", "r", "o" })
+  end,
+})
+
+-- 修复 nvim-cmp 在插入模式下拖动鼠标插入奇怪文本的问题
+vim.api.nvim_create_autocmd("InsertEnter", {
+  callback = function()
+    vim.schedule(function()
+      local keys = { "<LeftMouse>", "<LeftDrag>", "<LeftRelease>" }
+      for _, key in ipairs(keys) do
+        local map = vim.fn.maparg(key, "i")
+        if map and map:find("cmp.utils.feedkeys") then
+          vim.keymap.del("i", key)
+        end
+      end
+    end)
   end,
 })
