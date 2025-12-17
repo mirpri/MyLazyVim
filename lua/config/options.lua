@@ -4,15 +4,13 @@
 vim.opt.number = true         -- show absolute line numbers
 vim.opt.relativenumber = false -- disable relative numbers
 
--- Use PowerShell (pwsh) as the default shell on Windows
+-- Use NuShell (nu) as the default shell on Windows
 if vim.fn.has("win32") == 1 or vim.fn.has("win64") == 1 then
-	vim.opt.shell = "pwsh"
-	-- Recommended flags for pwsh compatibility with Neovim
-	vim.opt.shellcmdflag = "-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command"
-	-- Redirect and encoding settings to capture output correctly
-	vim.opt.shellredir = '2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode'
-	vim.opt.shellpipe = '2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode'
-	-- Avoid extra quoting that breaks commands
+	vim.opt.shell = "nu"
+	vim.opt.shellcmdflag = "-c"
 	vim.opt.shellquote = ""
 	vim.opt.shellxquote = ""
+	-- NuShell redirection settings
+	vim.opt.shellredir = "out+err> %s"
+	vim.opt.shellpipe = "out+err> %s"
 end
