@@ -19,6 +19,7 @@ require("lazy").setup({
     -- add LazyVim and import its plugins
     { "LazyVim/LazyVim", import = "lazyvim.plugins" },
     { "Saghen/blink.cmp", enabled = false },
+    { "gitsigns.nvim", enabled = false },
     -- import/override with your plugins
     { import = "plugins" },
   },
