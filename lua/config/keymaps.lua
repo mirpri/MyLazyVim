@@ -85,6 +85,12 @@ wk.add({
   { "<leader>r", group = "Run/Compile" },
 })
 
+-- Markdown previewer
+vim.keymap.set("n", "<leader>rm", function()
+    vim.cmd(":MarkdownPreviewToggle")
+end, { noremap = true, silent = true, desc = "previewMarkdown" })
+
+
 vim.keymap.set("n", "<leader>fd", function()
   vim.cmd("lcd %:p:h")
 end, { noremap = true, silent = true, desc = "setCurrentAsPwd" })
