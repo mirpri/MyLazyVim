@@ -36,18 +36,3 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.opt_local.formatoptions:remove({ "c", "r", "o" })
   end,
 })
-
--- 修复 nvim-cmp 在插入模式下拖动鼠标插入奇怪文本的问题
-vim.api.nvim_create_autocmd("InsertEnter", {
-  callback = function()
-    vim.schedule(function()
-      local keys = { "<LeftMouse>", "<LeftDrag>", "<LeftRelease>" }
-      for _, key in ipairs(keys) do
-        local map = vim.fn.maparg(key, "i")
-        if map and map:find("cmp.utils.feedkeys") then
-          vim.keymap.del("i", key)
-        end
-      end
-    end)
-  end,
-})

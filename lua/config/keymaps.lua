@@ -11,12 +11,12 @@ vim.keymap.set("n", "<leader>rc", function()
     vim.cmd("w") -- save file
 
     -- Compile via NuShell
-    local compile_cmd = string.format('nu -c "g++ \\"%s\\" -o \\"%s\\""', filename, exe_path)
+    local compile_cmd = string.format('nu -c "clang++ -std=c++26 \'%s\' -o \'%s\'"', filename, exe_path)
     local compile_output = vim.fn.system(compile_cmd)
 
     if vim.v.shell_error == 0 and vim.fn.filereadable(exe_path) == 1 then
         -- Run executable in split terminal
-        vim.cmd(string.format(':split | :term nu -c "%s"', exe_path))
+        vim.cmd(string.format(':split | :term nu -c \'%s\'', exe_path))
     else
         local error_msg = "Compilation failed!"
         if compile_output and compile_output ~= "" then
@@ -30,7 +30,7 @@ end, { noremap = true, silent = true, desc = "runCpp" })
 vim.keymap.set("n", "<leader>rC", function()
     local temp_dir = vim.fn.expand("$TEMP") .. "/nvim_cpp_temp"
     if vim.fn.isdirectory(temp_dir) == 1 then
-        local cleanup_cmd = string.format('nu -c "rm -r -f \\"%s\\""', temp_dir)
+        local cleanup_cmd = string.format('nu -c "rm -r -f \'%s\'"', temp_dir)
         vim.fn.system(cleanup_cmd)
         if vim.v.shell_error == 0 then
             vim.notify("Temporary compilation directory cleaned successfully", vim.log.levels.INFO)
@@ -46,15 +46,21 @@ end, { noremap = true, silent = true, desc = "cleanCppTemp" })
 vim.keymap.set("n", "<leader>rp", function()
     local filename = vim.fn.expand("%:p"):gsub("\\", "/")
     vim.cmd("w")
-    vim.cmd(string.format(':split | :term nu -c "python \\"%s\\""', filename))
+    vim.cmd(string.format(':split | :term nu -c "python \'%s\'"', filename))
 end, { noremap = true, silent = true, desc = "runPython" })
 
 -- Rust runner
 vim.keymap.set("n", "<leader>rr", function()
     local filepath = vim.fn.expand("%:p:h"):gsub("\\", "/")
     vim.cmd("w")
-    vim.cmd(string.format(':split | :term nu -c "cargo run --manifest-path \\"%s/Cargo.toml\\""', filepath))
+    vim.cmd(string.format(':split | :term nu -c "cargo run --manifest-path \'%s/Cargo.toml\'"', filepath))
 end, { noremap = true, silent = true, desc = "runRust (cargo)" })
+
+-- Markdown previewer
+vim.keymap.set("n", "<leader>rm", function()
+    vim.cmd(":MarkdownPreviewToggle")
+end, { noremap = true, silent = true, desc = "previewMarkdown" })
+
 
 -- Set current buffer's directory as pwd
 vim.keymap.set("n", "<leader>fd", function()
